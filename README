@@ -1,1 +1,1 @@
-
+GEMSECDataPipelining is a re-working of existing code that mainly interprets data from pdb files. This projects exists in order to make the code-base better organized, documented, and easier to use.
