@@ -4,7 +4,7 @@ Created on Thu Jun 27 17:26:55 2019
 
 @author: jtfl2
 
-Helper script to clean pdb folder in current directory
+Helper script to clean pdb folders
 """
 
 import cleaning
