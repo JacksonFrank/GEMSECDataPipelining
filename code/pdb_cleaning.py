@@ -9,12 +9,18 @@ Helper script to clean pdb folders
 
 import cleaning
 import os
+import subprocess
 import platform
 import easygui
 
+"""
+This check is for my local machine, as graphical interfaces
+    on Windows Subsystem for Linux is different
+"""
 if 'Microsoft' in platform.release():
-    os.system('export DISPLAY=:0')
-    os.system('echo $DISPLAY')
+    os.environ["DISPLAY"] = ":0"
+    print "Display: "
+    subprocess.call("echo $DISPLAY", shell=True)
 
 
 
