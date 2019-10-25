@@ -14,14 +14,6 @@ import platform
 import easygui
 
 def cleanPDB():
-    """
-    This check is for my local machine, as graphical interfaces
-        on Windows Subsystem for Linux are different
-    """
-    if 'Microsoft' in platform.release():
-        os.environ["DISPLAY"] = ":0"
-        print "Display: "
-        subprocess.call("echo $DISPLAY", shell=True)
 
     d = os.getcwd()
 

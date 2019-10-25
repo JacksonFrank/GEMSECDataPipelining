@@ -33,7 +33,7 @@ def make_struc(j, prot, current):
 
 if __name__ == '__main__':
     for ind, j in enumerate(lists[current_list]):
-        print('Protein: ' + j, 'Finished: ' + str(ind) + '/' +str(len(lists[current_list])), 'Failed: ' + str(len(failedlist)), 'Current Chunk: ' + str(current_list), 'Current Drive: ' + str(current), end = '\r')
+        #print('Protein: ' + j, 'Finished: ' + str(ind) + '/' +str(len(lists[current_list])), 'Failed: ' + str(len(failedlist)), 'Current Chunk: ' + str(current_list), 'Current Drive: ' + str(current), end = '\r')
         prot = j.replace('.pdb','')
         stop = False
         for check in range(3):
