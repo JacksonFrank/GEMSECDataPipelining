@@ -16,7 +16,7 @@ from symbols import *
 #from Bio import Bio.PDB
 #import Bio 
 
-class PDBParsing: 
+class PDBParser: 
     d = os.getcwd()
 
     def find_max(length):
