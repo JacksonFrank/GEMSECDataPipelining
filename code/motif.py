@@ -6,13 +6,13 @@ Created on Tue May 21 16:22:23 2019
 """
 import os
 import pickle
+from symbols import *
 d = os.getcwd()
 functions = ["ϕX{2,3}ϕX{2,3}ϕXϕ","YXXϕ","P[TS]AP","QXXϕXX[FHT][FHY]","[ST]X[IL]P",
              "[RK]XLX{0,1}ϕ","PXIX[IV]","RXXLXXϕ","[ST]PXX[ST]","ϕ(K)X[DE]","[DE]X([ST])ϕ",
              "[DE]XXD[GSAN]","[ST](P)"]
 
 bulky_hydrophobic = 'W Y V L F I'.split(' ')
-aa = 'A,N,D,C,Q,E,G,H,I,L,K,M,F,P,R,S,T,W,Y,V'.split(',')
 
 functions = [x.replace('p','').replace(',','').replace('\t','').replace('|','') for x in functions]
 combos = {}

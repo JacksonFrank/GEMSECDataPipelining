@@ -12,17 +12,14 @@ import os
 import Bio
 import cleaning
 from decimal import Decimal
+from symbols import *
 #from pdbtools import pdbtools as pdb
 
-ElementSymbols = 'H, He, Li, Be, B, C, N, O, F, Ne, Na, Mg, Al, Si, P, S, Cl, Ar, K, Ca, Sc, Ti, V, Cr, Mn, Fe, Co, Ni, Cu, Zn, Ga, Ge, As, Se, Br, Kr, Rb, Sr, Y, Zr, Nb, Mo, Tc, Ru, Rh, Pd, Ag, Cd, In, Sn, Sb, Te, I, Xe, Cs, Ba, La, Ce, Pr, Nd, Pm, Sm, Eu, Gd, Tb, Dy, Ho, Er, Tm, Yb, Lu, Hf, Ta, W, Re, Os, Ir, Pt, Au, Hg, Tl, Pb, Bi, Po, At, Rn, Fr, Ra, Ac, Th, Pa, U, Np, Pu, Am, Cm, Bk, Cf, Es, Fm, Md, No, Lr, Rf, Db, Sg, Bh, Hs, Mt, Uun, Uuu, Uub, Uut, Uuq, Uup, Uuh, Uus, Uuo'.split(', ')
-aa = 'A,N,D,C,Q,E,G,H,I,L,K,M,F,P,R,S,T,W,Y,V'.split(',')
-aa3 = 'ALA,ASN,ASP,CYS,GLN,GLU,GLY,HIS,ILE,LEU,LYS,MET,PHE,PRO,ARG,SER,THR,TRP,TYR,VAL'.split(',')
-element_index = ['N', 'C', 'O', 'S', 'Se']
 d = os.getcwd()
 parsed_aa = {}
 def parse_aa():
     global parsed_aa
-    for amino in aa:
+    for amino in AA:
         if not os.path.exists(d + '/amino_acids'):
             os.mkdir(d + '/amino_acids')
         out = Bio.PDB.PDBIO()
@@ -65,13 +62,13 @@ def find_sequence_recurs(nodes, length, current_ind, current_sequence, current_v
         else:
             POSSIBLE_SEQUENCES[current_value] = [current_sequence]
     values = []
-    for a in aa:
+    for a in AA:
         values.append(heuristic(current_ind,nodes, a))
     max_value = max(values)
     if max_value > 0.8:
         for i in range(len(values)):
             if max_value == values[i]:
-                amino = aa[i]
+                amino = AA[i]
                 find_sequence_recurs(nodes, length, current_ind + len(parsed_aa[amino]), current_sequence + amino, current_value + max_value)
     
 def find_white_space(total_space, text): 
@@ -118,7 +115,7 @@ def decode(encoding, save_loc = d, save_name = '', find_coord = False, use_coord
             string = 'ATOM' #+ str(i + 1) + '  '+ encoding['seq_to_atoms'][i][0]
             string += find_white_space(7, str(i + 1)) + str(i+1) + '  '
             string += encoding['ele_to_amino'][i][0] + find_white_space(4, encoding['ele_to_amino'][i][0])
-            string += aa3[aa.index(encoding['ele_to_amino'][i][1])] + ' A'
+            string += AA3[AA.index(encoding['ele_to_amino'][i][1])] + ' A'
             string += find_white_space(4, str(amino_num)) + str(amino_num)
             string += find_white_space(12, str(round(Decimal(placed[i][1][0]), 3))) + str(round(Decimal(placed[i][1][0]), 3))
             string += find_white_space(8, str(round(Decimal(placed[i][1][1]), 3))) + str(round(Decimal(placed[i][1][1]), 3))
