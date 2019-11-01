@@ -10,22 +10,27 @@ import easygui as eg
 import motif as m
 import pickle
 
+# d is current directory
 d = os.getcwd()
 file = eg.fileopenbox(msg = 'Where is the file?')
+# peps are peptides
 peps = {}
 full_string = ''
+# gets entire file as single string
 with open(file, 'r') as g:
     string = g.read()
     while string:
         full_string += string
         string = g.read()
+# replaces all double spaces with single spaces
 full_string.replace('  ',' ')
+# splits string into an array by '>'
 full_string = full_string.split('>')
 for i in range(len(full_string)):
     full_string[i] = full_string[i].replace('\n',' ').replace('>','').split(' ')
     if len(full_string[i]) > 1:
+        # index of -2 means second to last element in the array
         peps[full_string[i][0]] = full_string[i][-2]
-  
 count = 0
 for i in peps:
     count += 1
