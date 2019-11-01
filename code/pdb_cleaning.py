@@ -17,5 +17,3 @@ class PDBCleaning:
         filepath = easygui.fileopenbox('Choose a file', filetypes=["*.pdb"])
         if filepath is not None:
             cleaning.cleanATOM(filepath)
-    
-
