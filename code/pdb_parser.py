@@ -19,29 +19,35 @@ from symbols import *
 class PDBParser: 
     d = os.getcwd()
 
+    # returns 14 times parameter
     def find_max(length):
         return 14*length
 
-
+    # creates a set of temp directories in current directory with names temp_pdb/(0-argument value)
     def set_temp_value(val):
         for i in range(val):
             if not os.path.exists(d + '/temp_pdb/' + str(i)):
                 os.mkdir(d + '/temp_pdb/' + str(i))
 
+    # Returns an array containing the first (inclusive) and last (exclusive) index of the given peptide in the given full peptide
+    # If the peptide isn't within the given full peptide, will return -1
     def find_index(full_pep, pep):
         for i in range(len(full_pep)):
             if pep == full_pep[i:i+len(pep)]:
                 return [i, i+len(pep)]
         return -1
 
+    # parses pdb file
     def seperate_pdb(loc, temp_value):
         temp = []
         current = 0
+        #removes all of the subdirectories of the temp directories
         for i in os.listdir(d + '/temp_pdb/'+str(temp_value)):
             os.remove(d + "/temp_pdb/" +str(temp_value) +"/" + i)
         new = True
         current_amino = 0
         skip_amino = -1
+        # opens pdb file as read only
         with open(loc,'r') as g:
             string = g.readline()
             while string:
