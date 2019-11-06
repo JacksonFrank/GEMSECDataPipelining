@@ -16,6 +16,22 @@ from symbols import *
 #from Bio import Bio.PDB
 #import Bio 
 
+class memoize(object):
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
+
+    def __call__(self, *args):
+        if args in self.cache:
+            return self.cache[args]
+        else:
+            result = self.func(*args)
+            self.cache[args] = result
+            return result
+
+    def __get__(self, obj, objtype):
+        return partial(self.__call__, obj)
+
 class PDBParser: 
     d = os.getcwd()
 
@@ -37,25 +53,35 @@ class PDBParser:
                 return [i, i+len(pep)]
         return -1
 
-    # parses pdb file
+    # seperates the given pdb file into seperate pdb files based on blocks
     def seperate_pdb(loc, temp_value):
         temp = []
         current = 0
-        #removes all of the subdirectories of the temp directories
+        #removes all of the subdirectories of the given temp directory
         for i in os.listdir(d + '/temp_pdb/'+str(temp_value)):
             os.remove(d + "/temp_pdb/" +str(temp_value) +"/" + i)
+        # what is the point of new? It serves no purpose logically in this function
         new = True
         current_amino = 0
         skip_amino = -1
         # opens pdb file as read only
+        # int(string[23:26]) is the residue sequence number
         with open(loc,'r') as g:
             string = g.readline()
+            # for every line in the file
             while string:
+                # This assumes that the pdb file is sorted by residue number
+                # I'm not sure what -1 exactly means, but if that's the residue number it will skip the current line
                 if skip_amino != int(string[23:26]):
+                    # checks to see if the line contains a new residue sequence number
                     if current_amino != int(string[23:26]):
                         new = True
                         current_amino = int(string[23:26])
+                    # if this is an ATOM line and the element symbol isn't 'H'
                     if string.startswith('ATOM') and string[-4] != 'H':
+                        # if the element symbol is 'N', add the current record to the array
+                        # else, the current skip residue sequence number will be set to the current residue sequence number
+                        # has same behaviour for if new is true or false
                         if new and string[-4] == 'N':
                             new = False
                             temp.append(string)
@@ -63,21 +89,31 @@ class PDBParser:
                             temp.append(string)
                         else:
                             skip_amino = current_amino
+                    # if we're at the end of the block of ATOM records
                     elif string.startswith('TER'):
+                        # create a temporary directory with our temp value
+                        # creates a new pdb file based on the current block number and stores all of the ATOM records from
+                        #   the last reset in this file
                         with open(d + "/temp_pdb/" +str(temp_value) +'/temp' + str(current) + '.pdb', 'w+') as h:
                             for i in temp:
                                 h.write(i)
+                            # don't we need to also write the TER record to end the pdb file?
                         current += 1
+                        # clears the current ATOM records
                         temp = []
                 string = g.readline()
             
-
+   
+    # file argument refers to an array of the return object of ProDy.parsePDB, an AtomGroup object
+    # returns 2 dictionarys, 1st contains an indexed arraw of AtomObjects with the 'full' key pointing toward the full
+    #   sequence of the AtomObjects, and the 2nd array tells what elements (keys) have been found
     def find_seq(file):
         sequence = {}
         sequence['full'] = ''
         current = -1
         found_elements = {}
         for i in range(len(file)):
+            # if the name of the given atom group is 'N' (refers to element symbol?)
             if file[i].getName() == 'N':
                 current += 1
                 sequence['full'] += file[i].getSequence() #AA[AA3.index(string[17:20])]
@@ -115,7 +151,7 @@ class PDBParser:
     #            string = g.readline()
     #    return sequence
 
-
+    # need more info on arguments
     def possible_bonds(i, pep, ind):
         possible = []
         possible.append(pep[i-ind[0]])
@@ -125,23 +161,8 @@ class PDBParser:
             possible.append(pep[i - ind[0] +1])
         return possible
         
-    class memoize(object):
-        def __init__(self, func):
-            self.func = func
-            self.cache = {}
-
-        def __call__(self, *args):
-            if args in self.cache:
-                return self.cache[args]
-            else:
-                result = self.func(*args)
-                self.cache[args] = result
-                return result
-
-        def __get__(self, obj, objtype):
-            return partial(self.__call__, obj)
-        
-        
+    # cleans all of the files in the pdb_input directory
+    # outputs results to pdb_output directory
     def clean_all(pdb_input, pdb_output):
         print(pdb_input, pdb_output)
         total = len(os.listdir(pdb_input))
@@ -154,8 +175,9 @@ class PDBParser:
 
     def make_structure(pdb_loc, length, maxValues, temp_value):
     #    pdb = pdb_loc.split('/')[-1]
-        seperate_pdb(pdb_loc, temp_value)
+        seperate_pdb(pdb_loc, temp_value) # seperates pdb files by block, see above function
         completed = []
+        # for every seperated file
         for i in os.listdir(d + "/temp_pdb/" +str(temp_value)):
             try:
                 pdb_parsed = pd.parsePDB(d + "/temp_pdb/" +str(temp_value) +"/" + i)
