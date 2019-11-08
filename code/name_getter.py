@@ -5,6 +5,9 @@ Created on Mon Jun 24 14:13:10 2019
 @author: HF
 """
 
+# replace d with cwd (current working directory) for clarity?
+#   this would be for all files
+
 import os
 import wget
 
@@ -16,6 +19,7 @@ failed = []
 i = os.listdir(d+'\\found_peps')
 lists = {}
 current = 0
+# downloads pdb file using pepname
 def get_url(pepname):
     print('Current: ' + pepname, end = '\r')
     global failed
@@ -25,6 +29,7 @@ def get_url(pepname):
     except:
         newstring = pepname
         found = False
+        # tries to download file from url, tries error checking on input
         while not found and len(newstring) != 0:
             newstring = newstring[:-1]
             print('                                                              ', end = '\r')
@@ -39,6 +44,7 @@ def get_url(pepname):
         if not found:
             failed.append(pepname)
 
+# 
 with open(d + '\\pep_titles.txt', 'w+') as f:
     f.write(i[0])
     get_url(i[0])
