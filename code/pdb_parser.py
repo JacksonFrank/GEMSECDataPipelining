@@ -229,18 +229,26 @@ class PDBParser:
         # bonded is a mV x mV array of 0s
         bonded = np.zeros((mV, mV))
         amino_acid_list = []
+        # for all of the atom objects
         for i in range(len(new_pep)):
+            # ele is a float of the current atom object element index + 1
             ele = float(ELEMENT_SYMBOLS.index(str(new_pep[i][0].getElement()))) + 1
+            # sets the 5th row of index to appropriate value
             if ele == 6.0:
                 index[5][i] = 0.0
             elif ele == 7.0 and Nterm:
                 index[5][i] = 1.0
             elif ele == 8.0:
                 index[5][i] = 2.0
+            # checks to see if the current pep is N, and set NTerm accordingly
             if Nterm == False and new_pep[i][0].getName() == 'N':
                 Nterm = True
+            
+            # sets the index of the row of the element index to one
             index[ELEMENT_INDEX.index(new_pep[i][0].getElement())][i] = 1
+            # add name and sequence of pep to the list
             amino_acid_list.append([str(new_pep[i][0].getName()), str(new_pep[i][0].getSequence())])
+            # calculates lengths and bonds of peps
             for j in range(len(new_pep)):
                 if i != j and lengths[i][j] == 0:
                     lengths[i][j] = (float(pd.calcDistance(new_pep[i][0],new_pep[j][0])))
@@ -251,6 +259,7 @@ class PDBParser:
                         bonded[j][i] = bonded[i][j]
         
         # returns a final representation of the given pdb peps?
+        # make final an object, not just a dictionary
         final = {}
         final['sequence'] = pep
         final['ele_to_amino'] = amino_acid_list
