@@ -224,6 +224,7 @@ def fun13(pep):
 motifs[functions[12]] = fun13
 combos[functions[12]] = [2,2]
 
+# where are combos supposed to be defined?
 def pep_parser(pep, length, pos = False):
     found_motifs = {}
     found_motifs['full'] = pep

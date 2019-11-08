@@ -185,11 +185,11 @@ class PDBParser:
                 continue
             if pdb_parsed == None:
                 continue
-            seq, elements = find_seq(pdb_parsed)
+            seq, elements = find_seq(pdb_parsed) # see earlier function, seq holds a dictionary of AtomObjects
             for i in elements:
                 if i not in ELEMENT_INDEX:
                     return []
-            info = m.pep_parser(seq['full'], length)
+            info = m.pep_parser(seq['full'], length) # sends a sequence array and the given length to the pep parser
     #        if not os.path.exists(d + '/made_adj/' + pdb.replace('.pdb','')):
     #            os.mkdir(d + '/made_adj/' + pdb.replace('.pdb',''))
             for motif in info:
@@ -199,24 +199,34 @@ class PDBParser:
                     completed.append(main_calc(pep, seq, maxValues, pdb_parsed))
         return completed
 
+    # same as make_structure but doesn't parse pdb blocks or peptides
     def make_from_small_pdb(file_loc):
         pdb_parsed = pd.parsePDB(file_loc)
         seq, elements = find_seq(pdb_parsed)
         maxV = find_max(len(seq['full']))
         return main_calc([seq['full'], 0, len(seq)-1], seq, maxV, pdb_parsed)
 
+    # file is a parsed pdb (AtomObject array)
     def main_calc(pep_info, seq_info, mV, file):
         Nterm = False
+        # puts the pep sequence into pep
         pep = pep_info[0]
     #    print(pep)
+        # puts the pep extra info int ind
         ind = [pep_info[1], pep_info[2]]
         new_pep = []
+        # for everything in the sequence that we want
         for i in range(ind[0],ind[1]):
+            # for all of the AtomObjects in the current seq
             for j in seq_info[i]:
+                # append the current atom object and the current index in the sequence
                 new_pep.append([file[j], i])
 
+        # length is a mV x mV array of 0s
         lengths = np.zeros((mV, mV))
+        # index is an element index + 1 x mV array of 0s
         index = np.zeros((len(ELEMENT_INDEX) + 1,mV))
+        # bonded is a mV x mV array of 0s
         bonded = np.zeros((mV, mV))
         amino_acid_list = []
         for i in range(len(new_pep)):
@@ -240,6 +250,7 @@ class PDBParser:
                         bonded[i][j] = lengths[i][j]
                         bonded[j][i] = bonded[i][j]
         
+        # returns a final representation of the given pdb peps?
         final = {}
         final['sequence'] = pep
         final['ele_to_amino'] = amino_acid_list
