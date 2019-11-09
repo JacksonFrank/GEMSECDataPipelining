@@ -44,14 +44,12 @@ def get_url(pepname):
         if not found:
             failed.append(pepname)
 
-# 
 with open(d + '\\pep_titles.txt', 'w+') as f:
     f.write(i[0])
     get_url(i[0])
     for j in range(1,len(i)):
         f.write(',' + i[j])
         get_url(i[j])
-
 with open(d + '\\failedpeps.txt', 'w+') as f:
     f.write(failed[0])
     for j in range(1,len(failed)):

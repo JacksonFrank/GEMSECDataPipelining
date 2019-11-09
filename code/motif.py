@@ -136,7 +136,7 @@ def fun_tester(t, pep):
             return True
     return False
 
-
+# what calls these functions?
 def fun1(pep):
     t = ['ϕXXϕXXϕXϕ']
     if len(pep) == 9:
