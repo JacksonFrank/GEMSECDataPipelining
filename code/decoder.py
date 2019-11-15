@@ -17,41 +17,50 @@ from symbols import *
 
 d = os.getcwd()
 parsed_aa = {}
+
+# parses peptides and creates file structures to store these peptides
 def parse_aa():
+    if not os.path.exists(d + '/amino_acids'):
+        os.mkdir(d + '/amino_acids')
     global parsed_aa
     for amino in AA:
-        if not os.path.exists(d + '/amino_acids'):
-            os.mkdir(d + '/amino_acids')
+        # out writes information to files
         out = Bio.PDB.PDBIO()
+        # i is a peptide structure from amino acid
         i = pb.make_structure(amino, [180]*len(amino),[180]*len(amino))
         out.set_structure(i)
         out.save(d + '/amino_acids/' + amino + '.pdb')
         cleaning.cleanATOM(d + '/amino_acids/' + amino + '.pdb', out_file= d + '/amino_acids/' + amino + '.pdb', ext = '.pdb')
         temp = pd.parsePDB(d + '/amino_acids/' + amino + ".pdb")
+        # maps amino acids to their atoms
         parsed_aa[amino] = []
         for atom in temp.iterAtoms():
             parsed_aa[amino].append(str(atom.getName()))
-        
+
+# what are nodes? (2d array)
 def remove_padding(nodes):
     atoms = []
     current = 0
+    # gets the currrent column of the first 5 rows
     col = nodes[0:5, current]
     while sum(col) != 0:
-        atoms.append(element_index[col.tolist().index(1.0)])
+        # adds the element index of the current node column
+        atoms.append(ELEMENT_INDEX[col.tolist().index(1.0)])
         current += 1
         col = nodes[0:5, current]
     return atoms
 
-    
+# checks the rate of correctness in something
 def heuristic(index, node, amino_acid):
     correct = 0
     total = 0
     for atom in parsed_aa[amino_acid]:
-        if (index+total) < len(node) and ElementSymbols[int(node[index+total][0]) - 1] == atom[0]:
+        if (index+total) < len(node) and ELEMENT_SYMBOLS[int(node[index+total][0]) - 1] == atom[0]:
             correct += 1
         total += 1
     return float(correct/total)
-    
+
+
 def find_sequence_recurs(nodes, length, current_ind, current_sequence, current_value):
     if len(parsed_aa.keys()) == 0:
         parse_aa()

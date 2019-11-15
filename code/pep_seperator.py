@@ -12,6 +12,7 @@ import pickle
 
 # d is current directory
 d = os.getcwd()
+# o
 file = eg.fileopenbox(msg = 'Where is the file?')
 # peps are peptides
 peps = {}

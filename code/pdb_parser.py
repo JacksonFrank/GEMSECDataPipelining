@@ -16,6 +16,7 @@ from symbols import *
 #from Bio import Bio.PDB
 #import Bio 
 
+# what is this class for?
 class memoize(object):
     def __init__(self, func):
         self.func = func
@@ -36,6 +37,7 @@ class PDBParser:
     d = os.getcwd()
 
     # returns 14 times parameter
+    # why is this here?
     def find_max(length):
         return 14*length
 
@@ -105,6 +107,7 @@ class PDBParser:
             
    
     # file argument refers to an array of the return object of ProDy.parsePDB, an AtomGroup object
+    # what is an AtomGroup
     # returns 2 dictionarys, 1st contains an indexed arraw of AtomObjects with the 'full' key pointing toward the full
     #   sequence of the AtomObjects, and the 2nd array tells what elements (keys) have been found
     def find_seq(file):

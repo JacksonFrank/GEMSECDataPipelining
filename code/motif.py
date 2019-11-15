@@ -101,7 +101,7 @@ combos = {}
 motifs = {}                
     
 
-
+# need more info on arguments
 def make_peps(location, pep, length, pos = False):
     if length > (location[1] -  location[0]): 
         index = location[1] - length
@@ -118,7 +118,8 @@ def make_peps(location, pep, length, pos = False):
             found.append((new, index, index + length))
         index += 1
     return found
-    
+
+# need more info on arguments
 def fun_tester(t, pep):
     for seq in t:
         found = 0
