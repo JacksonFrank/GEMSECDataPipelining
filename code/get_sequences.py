@@ -46,7 +46,7 @@ def sequence_maker(length, pdb_folder = os.getcwd() + '/pdb', outputname = 'allp
             
 #sequence_maker(7, pdb_folder = '/home/gemsec-user/Desktop/Jons_stuff/pytorch_stuff/cleaned')
             
-# prints all of the unique and ununique sequences in the given file
+# prints all of the unique sequences in the given file
 def sequence_counter(filename):
     with open(filename, 'r') as g:
         unique = 0
