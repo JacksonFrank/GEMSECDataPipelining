@@ -38,6 +38,7 @@ def parse_aa():
             parsed_aa[amino].append(str(atom.getName()))
 
 # what are nodes? (2d array)
+# returns the atmos from the given nodes
 def remove_padding(nodes):
     atoms = []
     current = 0
@@ -50,7 +51,7 @@ def remove_padding(nodes):
         col = nodes[0:5, current]
     return atoms
 
-# checks the rate of correctness in something
+# checks the rate of correctness in heuristic efficiency
 def heuristic(index, node, amino_acid):
     correct = 0
     total = 0
@@ -60,10 +61,11 @@ def heuristic(index, node, amino_acid):
         total += 1
     return float(correct/total)
 
-
+# finds all possible sequences of amino acid sequences keyed to heuristic efficiency values
 def find_sequence_recurs(nodes, length, current_ind, current_sequence, current_value):
     if len(parsed_aa.keys()) == 0:
         parse_aa()
+    # adds the given value and sequence to the possible sequences dictionary
     if len(current_sequence) == length:
         global POSSIBLE_SEQUENCES
         if current_value in POSSIBLE_SEQUENCES:
@@ -79,11 +81,14 @@ def find_sequence_recurs(nodes, length, current_ind, current_sequence, current_v
             if max_value == values[i]:
                 amino = AA[i]
                 find_sequence_recurs(nodes, length, current_ind + len(parsed_aa[amino]), current_sequence + amino, current_value + max_value)
-    
+
+# returns a string of whitespace specified
 def find_white_space(total_space, text): 
     return ' '*(total_space - len(text))
         
 POSSIBLE_SEQUENCES = None
+
+# what are nodes?
 def decode(encoding, save_loc = d, save_name = '', find_coord = False, use_coord = False):
     if len(parsed_aa.keys()) == 0:
         parse_aa()

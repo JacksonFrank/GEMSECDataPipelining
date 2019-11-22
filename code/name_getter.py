@@ -44,6 +44,7 @@ def get_url(pepname):
         if not found:
             failed.append(pepname)
 
+# writes files to storage
 with open(d + '\\pep_titles.txt', 'w+') as f:
     f.write(i[0])
     get_url(i[0])

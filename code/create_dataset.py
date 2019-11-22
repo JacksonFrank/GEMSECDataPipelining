@@ -20,6 +20,7 @@ class CreateDataset:
     current_list = int(eg.enterbox(msg = 'Which Temp?'))
     failedlist = []
 
+    # constructes peptides from pdb files, uses pickle to dump these structures into storage
     def make_struc(j, prot, current):
         done = pp.make_structure(d + '/cleaned/' + j,7, m, current_list)
         if len(done) > 0:
@@ -32,7 +33,8 @@ class CreateDataset:
                 pickle.dump(i, open('/media/jonathan/drive' + str(current) + '/peptides/' + prot + '/' + i['sequence'] + str(current_n) +  '.pickle', 'wb'))
         else:
             failedlist.append(j)
-
+    
+    
     def createDataset():
         for ind, j in enumerate(lists[current_list]):
             print('Protein: ' + j, 'Finished: ' + str(ind) + '/' +str(len(lists[current_list])), 'Failed: ' + str(len(failedlist)), 'Current Chunk: ' + str(current_list), 'Current Drive: ' + str(current), end = '\r')

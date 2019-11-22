@@ -11,6 +11,7 @@ import cleaning
 import os
 import easygui
 
+# cleans the pdb file to work with Rosetta
 class PDBCleaning:
     def cleanPDB():
         d = os.getcwd()
