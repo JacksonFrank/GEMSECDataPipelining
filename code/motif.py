@@ -102,6 +102,7 @@ motifs = {}
     
 
 # need more info on arguments
+# returns an array of all possible peptides based on the given length, petides, and locations
 def make_peps(location, pep, length, pos = False):
     if length > (location[1] -  location[0]): 
         index = location[1] - length
@@ -120,12 +121,13 @@ def make_peps(location, pep, length, pos = False):
     return found
 
 # need more info on arguments
+# tests the peptide based on t
 def fun_tester(t, pep):
     for seq in t:
         found = 0
         for i in range(len(pep)):
             if seq[i] == 'X':
-                if pep[i] in aa:
+                if pep[i] in AA:
                     found += 1
             elif seq[i] == 'ϕ':
                 if pep[i] in bulky_hydrophobic:
@@ -225,7 +227,8 @@ def fun13(pep):
 motifs[functions[12]] = fun13
 combos[functions[12]] = [2,2]
 
-# where are combos supposed to be defined?
+# what are combos?
+# finds all peptides keyed to motifs, returns that dictionary
 def pep_parser(pep, length, pos = False):
     found_motifs = {}
     found_motifs['full'] = pep
@@ -235,6 +238,7 @@ def pep_parser(pep, length, pos = False):
         for j in range(len(pep)):
 #            print('Current Motif: ' + i + '     Position: ' + str(j) + '/' + str(len(pep)) + '    Found = ' + str(len(found_motifs[i])), end = '\r')
             for size in range(combos[i][0], combos[i][1] + 1):
+                # fun1-13 are run in here as needed
                 if motifs[i](pep[j:j+size]):
                     l = make_peps((j,j+size),pep,length, pos)
                     for x in l:

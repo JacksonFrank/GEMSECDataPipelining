@@ -19,6 +19,7 @@ d = os.getcwd()
 parsed_aa = {}
 
 # parses peptides and creates file structures to store these peptides
+# stores a dictionary with peptide keys that map to the atoms that make it up
 def parse_aa():
     if not os.path.exists(d + '/amino_acids'):
         os.mkdir(d + '/amino_acids')
@@ -38,7 +39,7 @@ def parse_aa():
             parsed_aa[amino].append(str(atom.getName()))
 
 # what are nodes? (2d array)
-# returns the atmos from the given nodes
+# returns the atoms from the given nodes
 def remove_padding(nodes):
     atoms = []
     current = 0
@@ -89,6 +90,8 @@ def find_white_space(total_space, text):
 POSSIBLE_SEQUENCES = None
 
 # what are nodes?
+# decodes information into a pdb file
+# what does encoding look like?
 def decode(encoding, save_loc = d, save_name = '', find_coord = False, use_coord = False):
     if len(parsed_aa.keys()) == 0:
         parse_aa()
