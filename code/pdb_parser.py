@@ -81,9 +81,9 @@ class PDBParser:
                         current_amino = int(string[23:26])
                     # if this is an ATOM line and the element symbol isn't 'H'
                     if string.startswith('ATOM') and string[-4] != 'H':
-                        # if the element symbol is 'N', add the current record to the array
+                        # if the element symbol is 'N' and new, add the current record to the array
+                        # else if not new, add the current record to the array
                         # else, the current skip residue sequence number will be set to the current residue sequence number
-                        # has same behaviour for if new is true or false
                         if new and string[-4] == 'N':
                             new = False
                             temp.append(string)
@@ -108,7 +108,7 @@ class PDBParser:
    
     # file argument refers to an array of the return object of ProDy.parsePDB, an AtomGroup object
     # what is an AtomGroup
-    # returns 2 dictionarys, 1st contains an indexed arraw of AtomObjects with the 'full' key pointing toward the full
+    # returns 2 dictionarys, 1st contains an indexed array of AtomGroups with the 'full' key pointing toward the full
     #   sequence of the AtomObjects, and the 2nd array tells what elements (keys) have been found
     def find_seq(file):
         sequence = {}
@@ -183,15 +183,17 @@ class PDBParser:
         # for every seperated file
         for i in os.listdir(d + "/temp_pdb/" +str(temp_value)):
             try:
+                # gets atom data
                 pdb_parsed = pd.parsePDB(d + "/temp_pdb/" +str(temp_value) +"/" + i)
             except:
                 continue
             if pdb_parsed == None:
                 continue
-            seq, elements = find_seq(pdb_parsed) # see earlier function, seq holds a dictionary of AtomObjects
+            seq, elements = find_seq(pdb_parsed)
             for i in elements:
                 if i not in ELEMENT_INDEX:
                     return []
+            # gets all the motifs from the peptides
             info = m.pep_parser(seq['full'], length) # sends a sequence array and the given length to the pep parser
     #        if not os.path.exists(d + '/made_adj/' + pdb.replace('.pdb','')):
     #            os.mkdir(d + '/made_adj/' + pdb.replace('.pdb',''))
@@ -262,7 +264,6 @@ class PDBParser:
                         bonded[j][i] = bonded[i][j]
         
         # returns a final representation of the given pdb peps?
-        # make final an object, not just a dictionary
         final = {}
         final['sequence'] = pep
         final['ele_to_amino'] = amino_acid_list

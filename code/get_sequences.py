@@ -13,7 +13,7 @@ import pdb_parser as pp
 #import pickle
 bad = ['X', 'Z', 'B', 'O']
 
-# Writes sequences to from pdb folder to output folders
+# For every pdb file in given directory, 
 def sequence_maker(length, pdb_folder = os.getcwd() + '/pdb', outputname = 'allpeps.txt'):
     outputname = str(length) + outputname
     sequences = {}
