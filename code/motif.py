@@ -6,13 +6,13 @@ Created on Tue May 21 16:22:23 2019
 """
 import os
 import pickle
+from symbols import *
 d = os.getcwd()
 functions = ["ϕX{2,3}ϕX{2,3}ϕXϕ","YXXϕ","P[TS]AP","QXXϕXX[FHT][FHY]","[ST]X[IL]P",
              "[RK]XLX{0,1}ϕ","PXIX[IV]","RXXLXXϕ","[ST]PXX[ST]","ϕ(K)X[DE]","[DE]X([ST])ϕ",
              "[DE]XXD[GSAN]","[ST](P)"]
 
 bulky_hydrophobic = 'W Y V L F I'.split(' ')
-aa = 'A,N,D,C,Q,E,G,H,I,L,K,M,F,P,R,S,T,W,Y,V'.split(',')
 
 functions = [x.replace('p','').replace(',','').replace('\t','').replace('|','') for x in functions]
 combos = {}
@@ -101,7 +101,8 @@ combos = {}
 motifs = {}                
     
 
-
+# need more info on arguments
+# returns an array of all possible peptides based on the given length, petides, and locations
 def make_peps(location, pep, length, pos = False):
     if length > (location[1] -  location[0]): 
         index = location[1] - length
@@ -118,13 +119,15 @@ def make_peps(location, pep, length, pos = False):
             found.append((new, index, index + length))
         index += 1
     return found
-    
+
+# need more info on arguments
+# tests the peptide based on t
 def fun_tester(t, pep):
     for seq in t:
         found = 0
         for i in range(len(pep)):
             if seq[i] == 'X':
-                if pep[i] in aa:
+                if pep[i] in AA:
                     found += 1
             elif seq[i] == 'ϕ':
                 if pep[i] in bulky_hydrophobic:
@@ -136,7 +139,7 @@ def fun_tester(t, pep):
             return True
     return False
 
-
+# what calls these functions?
 def fun1(pep):
     t = ['ϕXXϕXXϕXϕ']
     if len(pep) == 9:
@@ -224,6 +227,8 @@ def fun13(pep):
 motifs[functions[12]] = fun13
 combos[functions[12]] = [2,2]
 
+# what are combos?
+# finds all peptides keyed to motifs, returns that dictionary
 def pep_parser(pep, length, pos = False):
     found_motifs = {}
     found_motifs['full'] = pep
@@ -233,6 +238,7 @@ def pep_parser(pep, length, pos = False):
         for j in range(len(pep)):
 #            print('Current Motif: ' + i + '     Position: ' + str(j) + '/' + str(len(pep)) + '    Found = ' + str(len(found_motifs[i])), end = '\r')
             for size in range(combos[i][0], combos[i][1] + 1):
+                # fun1-13 are run in here as needed
                 if motifs[i](pep[j:j+size]):
                     l = make_peps((j,j+size),pep,length, pos)
                     for x in l:
